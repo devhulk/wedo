@@ -1,0 +1,48 @@
+provider "azurerm" {
+  version = "=2.0.0"
+  features {}
+}
+
+resource "azurerm_resource_group" "wedo-dev" {
+  name     = var.resource_group_name
+  location = var.resource_group_location
+  tags {
+      Key = "DoNotDelete"
+  }
+}
+
+resource "random_integer" "ri" {
+  min = 10000
+  max = 99999
+}
+
+resource "azurerm_cosmosdb_account" "db" {
+  name                = "wedo-db-${random_integer.ri.result}"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  offer_type          = "Standard"
+  kind                = "MongoDB"
+
+  enable_automatic_failover = true
+
+  consistency_policy {
+    consistency_level       = "BoundedStaleness"
+    max_interval_in_seconds = 10
+    max_staleness_prefix    = 200
+  }
+
+  geo_location {
+    location          = var.failover_location
+    failover_priority = 1
+  }
+
+  geo_location {
+    prefix            = "wedo-db-${random_integer.ri.result}-customid"
+    location          = azurerm_resource_group.rg.location
+    failover_priority = 0
+  }
+
+  tags {
+      Key = "DoNotDelete"
+  }
+}
