@@ -6,7 +6,7 @@ provider "azurerm" {
 resource "azurerm_resource_group" "wedo-dev" {
   name     = var.resource_group_name
   location = var.resource_group_location
-  tags {
+  tags = {
       Key = "DoNotDelete"
   }
 }
