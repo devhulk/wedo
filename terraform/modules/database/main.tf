@@ -6,8 +6,8 @@ resource "random_integer" "ri" {
 
 resource "azurerm_cosmosdb_account" "db" {
   name                = "wedo-db-${random_integer.ri.result}"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+  location            = var.resource_group_location
+  resource_group_name = var.resource_group_name
   offer_type          = "Standard"
   kind                = "MongoDB"
 
@@ -26,7 +26,7 @@ resource "azurerm_cosmosdb_account" "db" {
 
   geo_location {
     prefix            = "wedo-db-${random_integer.ri.result}-customid"
-    location          = azurerm_resource_group.rg.location
+    location          = var.resource_group_location
     failover_priority = 0
   }
 
