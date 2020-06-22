@@ -2,20 +2,22 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"net/http"
 
 	"wedo.io/api"
 )
 
-func main() {
-	wedo := api.List{
-		ID: 1,
-		Items: []api.ListItem{
-			api.Item{
-				ID:   1,
-				Name: "This is wedo item 1",
-			},
-		},
-	}
+func homePage(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Welcome to the HomePage!")
+}
 
-	wedo.CreateList()
+func handleRequests() {
+	http.HandleFunc("/", homePage)
+	http.HandleFunc("/wedo/create", api.CreateList)
+	log.Fatal(http.ListenAndServe(":10000", nil))
+}
+
+func main() {
+	handleRequests()
 }
