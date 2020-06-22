@@ -8,6 +8,7 @@ resource "azurerm_resource_group" "wedo-dev" {
   location = var.resource_group_location
   tags = {
       Key = "DoNotDelete"
+      Value = "True"
   }
 }
 

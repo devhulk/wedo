@@ -32,5 +32,6 @@ resource "azurerm_cosmosdb_account" "db" {
 
   tags = {
       Key = "DoNotDelete"
+      Value = "True"
   }
 }
